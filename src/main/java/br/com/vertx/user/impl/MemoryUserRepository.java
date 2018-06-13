@@ -1,4 +1,4 @@
-package br.com.vertx.user;
+package br.com.vertx.user.impl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -6,15 +6,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.vertx.user.User;
+import br.com.vertx.user.UserRepository;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 
-public class MockUserRepository implements UserRepository {
+public class MemoryUserRepository implements UserRepository {
 
     private Map<String, User> users;
 
-    public MockUserRepository() {
+    public MemoryUserRepository() {
         users = new HashMap<>();
         users.put("59aca527-92de-4b11-8f81-e0c0b2233286", new User("59aca527-92de-4b11-8f81-e0c0b2233286", "FULANO DA SILVA", "13283941319", LocalDate.parse("2005-02-15", DateTimeFormatter.ISO_DATE)));
         users.put("1ad8b6e7-4f3e-4318-acfa-f4e5ea8d44e1", new User("1ad8b6e7-4f3e-4318-acfa-f4e5ea8d44e1", "BELTRANO DA SILVA SANTOS", "46584784207", LocalDate.parse("1999-07-11", DateTimeFormatter.ISO_DATE)));

@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.com.vertx.handlers.MetricsHandler;
+import br.com.vertx.handlers.MetricsHttpClientHandler;
 import br.com.vertx.handlers.MetricsHttpServerHandler;
-import br.com.vertx.user.MockUserRepository;
+import br.com.vertx.user.impl.MemoryUserRepository;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.Json;
@@ -24,14 +26,16 @@ public class UserRestVerticle extends AbstractVerticle {
 	private UserController userController;
 	private MetricsService metricsService;
 	private HttpServer httpServer;
+	private HttpClient httpClient;
 
     @Override
     public void init(Vertx vertx, Context context) {
 		super.init(vertx, context);
         configurarJson();
-		this.userController = new UserController(new MockUserRepository());
+		this.userController = new UserController(new MemoryUserRepository());
 		this.metricsService = MetricsService.create(vertx);
 		this.httpServer = vertx.createHttpServer();
+		this.httpClient = vertx.createHttpClient();
     }
 
     @Override
@@ -59,6 +63,8 @@ public class UserRestVerticle extends AbstractVerticle {
 		router.route(HttpMethod.GET, "/metrics").produces("application/json").handler(MetricsHandler.create(metricsService, vertx));
 
 		router.route(HttpMethod.GET, "/metrics/server").produces("application/json").handler(MetricsHttpServerHandler.create(metricsService, httpServer));
+
+		router.route(HttpMethod.GET, "/metrics/client").produces("application/json").handler(MetricsHttpClientHandler.create(metricsService, httpClient));
 
         return router;
     }
