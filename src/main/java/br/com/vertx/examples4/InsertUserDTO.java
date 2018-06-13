@@ -34,6 +34,10 @@ public class InsertUserDTO {
     public User toUser() {
         return new User(nome, documento, dataNascimento);
 	}
+
+	public User toUser(String id) {
+        return new User(id, nome, documento, dataNascimento);
+	}
 	
 	@Override
 	public String toString() {

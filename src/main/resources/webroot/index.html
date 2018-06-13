@@ -7,19 +7,23 @@
 </head>
 
 <body>
-	Teste
+	
 	<div class="updates">User Inserts/Updates:</div><br>
 
-	<div id="status" class="news"></div>
+	<div id="status" class="updates"></div>
 
 </body>
 
 <script>
-	var eb = new EventBus("http://172.19.0.1:8082/eventbus");
+	var eb = new EventBus("http://172.19.0.1:8083/eventbus");
 
 	eb.onopen = function() {
 		eb.registerHandler("user-inserted", function(err, res) {
-			var msgHtml = "<h2>" + res.body + "</h2><br>";
+			var msgHtml = "<div>Inserted: " + res.body + "</div>";
+			$('#status').prepend(msgHtml);
+		}),
+		eb.registerHandler("user-updated", function(err, res) {
+			var msgHtml = "<div>Updated: " + res.body + "</div>";
 			$('#status').prepend(msgHtml);
 		})
 	}

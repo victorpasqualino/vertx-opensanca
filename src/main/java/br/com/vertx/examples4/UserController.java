@@ -60,6 +60,15 @@ public class UserController {
 
 	public void updateUser(RoutingContext routingContext) {
 		String id = routingContext.request().getParam("id");
+		InsertUserDTO insertUser = routingContext.getBodyAsJson().mapTo(InsertUserDTO.class);
+		User updateUser = insertUser.toUser(id);
+		userService.update(updateUser, r -> {
+			if (r.succeeded()) {
+				routingContext.response().setStatusCode(204).end();
+			} else {
+				routingContext.response().setStatusCode(500).end(r.cause().getMessage());
+			}
+		});
 	}
 
 }

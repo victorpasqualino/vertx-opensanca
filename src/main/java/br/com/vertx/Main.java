@@ -13,7 +13,6 @@ public class Main {
 		VertxOptions vertxOptions = new VertxOptions();
 		vertxOptions.setEventLoopPoolSize(1)
 					.setWorkerPoolSize(10)
-					.setClustered(true)
 					.setClusterManager(mgr)
 					// .setBlockedThreadCheckInterval(10000)
 					// .setMetricsOptions(new DropwizardMetricsOptions().setEnabled(true))

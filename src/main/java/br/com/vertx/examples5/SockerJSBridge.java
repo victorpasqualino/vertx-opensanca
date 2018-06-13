@@ -19,16 +19,15 @@ public class SockerJSBridge extends AbstractVerticle {
 		Router router = Router.router(vertx);
 
 		// Allow outbound traffic to the news-feed address
-		BridgeOptions options = new BridgeOptions().addOutboundPermitted(new PermittedOptions().setAddress("user-inserted"));
+		BridgeOptions options = new BridgeOptions().addOutboundPermitted(new PermittedOptions());
 
 		router.route("/eventbus/*").handler(SockJSHandler.create(vertx).bridge(options));
 
 		// Serve the static resources
 		router.route().handler(StaticHandler.create().setWebRoot("webroot"));
 
-		vertx.createHttpServer().requestHandler(router::accept).listen(8082);
+		vertx.createHttpServer().requestHandler(router::accept).listen(8083);
 
-		// vertx.setPeriodic(1000, r -> vertx.eventBus().publish("user-inserted", "Teste"));
 	}
 
 	public static void main(String[] args) {
@@ -38,6 +37,10 @@ public class SockerJSBridge extends AbstractVerticle {
 			Vertx vertx = r.result();
 			vertx.deployVerticle(SockerJSBridge.class.getName());
 		});
+
+		// VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(1).setWorkerPoolSize(10);
+		// Vertx vertx = Vertx.vertx(vertxOptions);
+		// vertx.deployVerticle(SockerJSBridge.class.getName());
 	}
 
 }

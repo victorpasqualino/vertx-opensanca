@@ -36,9 +36,9 @@ public class UserService {
 	public void update(User user , Handler<AsyncResult<Void>> handler) {
 		userRepository.findById(user.getId(), f -> {
 			if (f.succeeded()) {
-				userRepository.insert(user, r -> {
+				userRepository.update(user, r -> {
 					if (r.succeeded()) {
-						eventBus.publish(USER_INSERT_EVENT, Json.encode(new UserUpdateEvent(f.result(), user)));
+						eventBus.publish(USER_UPDATE_EVENT, Json.encode(new UserUpdateEvent(f.result(), user)));
 						handler.handle(Future.succeededFuture());
 					} else {
 						handler.handle(Future.failedFuture(r.cause()));
