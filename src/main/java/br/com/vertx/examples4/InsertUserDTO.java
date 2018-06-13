@@ -33,6 +33,11 @@ public class InsertUserDTO {
 
     public User toUser() {
         return new User(nome, documento, dataNascimento);
-    }
+	}
+	
+	@Override
+	public String toString() {
+		return "InsertUserDTO[nome=" + nome + ", documento=" + documento + ", dataNascimento" + dataNascimento + "]";
+	}
 
 }

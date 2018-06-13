@@ -3,32 +3,40 @@ package br.com.vertx.examples4;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import br.com.vertx.handlers.MetricsHandler;
+import br.com.vertx.handlers.MetricsHttpServerHandler;
 import br.com.vertx.user.MockUserRepository;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.dropwizard.MetricsService;
 import io.vertx.ext.web.Router;
 
 public class UserRestVerticle extends AbstractVerticle {
 
     private static final Logger log = LoggerFactory.getLogger(UserRestVerticle.class);
 
-    private UserController userController;
+	private UserController userController;
+	private MetricsService metricsService;
+	private HttpServer httpServer;
 
     @Override
     public void init(Vertx vertx, Context context) {
-        super.init(vertx, context);
+		super.init(vertx, context);
         configurarJson();
-        this.userController = new UserController(new MockUserRepository());
+		this.userController = new UserController(new MockUserRepository());
+		this.metricsService = MetricsService.create(vertx);
+		this.httpServer = vertx.createHttpServer();
     }
 
     @Override
     public void start() throws Exception {
-        vertx.createHttpServer().requestHandler(createRouter()::accept).listen(8081, r-> {
+        httpServer.requestHandler(createRouter()::accept).listen(8081, r-> {
             if (r.succeeded()) {
                 log.info("Server started on port " + r.result().actualPort());
             } else {
@@ -46,7 +54,11 @@ public class UserRestVerticle extends AbstractVerticle {
 
         router.route(HttpMethod.POST, "/users").consumes("application/json").produces("application/json").handler(userController::insertUser);
 
-        router.route(HttpMethod.PUT, "/users/:id").consumes("application/json").produces("application/json").handler(userController::updateUser);
+		router.route(HttpMethod.PUT, "/users/:id").consumes("application/json").produces("application/json").handler(userController::updateUser);
+		
+		router.route(HttpMethod.GET, "/metrics").produces("application/json").handler(MetricsHandler.create(metricsService, vertx));
+
+		router.route(HttpMethod.GET, "/metrics/server").produces("application/json").handler(MetricsHttpServerHandler.create(metricsService, httpServer));
 
         return router;
     }
