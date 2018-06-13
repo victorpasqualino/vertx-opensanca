@@ -1,3 +1,5 @@
+package br.com.vertx.examples1;
+
 import io.vertx.core.AbstractVerticle;
 
 public class BlockCheckerThread extends AbstractVerticle {

@@ -1,3 +1,4 @@
+package br.com.vertx.examples2;
 import io.vertx.core.AbstractVerticle;
 
 public class Receiver extends AbstractVerticle {

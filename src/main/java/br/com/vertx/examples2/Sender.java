@@ -1,9 +1,9 @@
+package br.com.vertx.examples2;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.EventBus;
 
 public class Sender extends AbstractVerticle {
 
