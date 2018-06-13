@@ -1,0 +1,29 @@
+<html>
+
+<head>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/vertx/3.5.2/vertx-eventbus.min.js'></script>
+</head>
+
+<body>
+	Teste
+	<div class="updates">User Inserts/Updates:</div><br>
+
+	<div id="status" class="news"></div>
+
+</body>
+
+<script>
+	var eb = new EventBus("http://172.19.0.1:8082/eventbus");
+
+	eb.onopen = function() {
+		eb.registerHandler("user-inserted", function(err, res) {
+			var msgHtml = "<h2>" + res.body + "</h2><br>";
+			$('#status').prepend(msgHtml);
+		})
+	}
+
+</script>
+
+</html>

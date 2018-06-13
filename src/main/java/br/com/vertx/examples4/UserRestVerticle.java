@@ -18,6 +18,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.dropwizard.MetricsService;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 
 public class UserRestVerticle extends AbstractVerticle {
 
@@ -32,7 +33,7 @@ public class UserRestVerticle extends AbstractVerticle {
     public void init(Vertx vertx, Context context) {
 		super.init(vertx, context);
         configurarJson();
-		this.userController = new UserController(new MemoryUserRepository());
+		this.userController = new UserController(vertx, new MemoryUserRepository());
 		this.metricsService = MetricsService.create(vertx);
 		this.httpServer = vertx.createHttpServer();
 		this.httpClient = vertx.createHttpClient();
@@ -50,7 +51,9 @@ public class UserRestVerticle extends AbstractVerticle {
     }
 
     private Router createRouter() {
-        Router router = Router.router(vertx);
+		Router router = Router.router(vertx);
+		
+		router.route().handler(BodyHandler.create());
 
         router.route(HttpMethod.GET, "/users").produces("application/json").handler(userController::listUsers);
 
