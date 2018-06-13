@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#Generate JAR file
+./mvnw clean package -q
+
+if [ "$1" = "docker" ]; then
+	docker build -t vertx-opensanca .
+	docker run -p 8081:8081 vertx-opensanca:latest
+else
+	java -jar -Xms256m -Xmx256m --illegal-access=warn target/vertx-opensanca-fat.jar
+fi

@@ -8,32 +8,33 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<main.verticle>br.com.vertx.examples4.UserRestVerticle</main.verticle>
+		<vertx.version>3.5.2</vertx.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
-			<version>3.5.2</version>
+			<version>${vertx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-web</artifactId>
-			<version>3.5.2</version>
+			<version>${vertx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-service-discovery</artifactId>
-			<version>3.5.2</version>
+			<version>${vertx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-circuit-breaker</artifactId>
-			<version>3.5.2</version>
+			<version>${vertx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-dropwizard-metrics</artifactId>
-			<version>3.5.2</version>
+			<version>${vertx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -94,7 +95,7 @@
 								</transformer>
 							</transformers>
 							<artifactSet></artifactSet>
-							<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+							<outputFile>${project.build.directory}/${project.artifactId}-fat.jar</outputFile>
 						</configuration>
 					</execution>
 				</executions>
